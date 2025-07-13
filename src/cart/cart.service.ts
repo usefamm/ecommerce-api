@@ -46,4 +46,15 @@ export class CartService {
       return data;
     }
   }
+
+  async getCart(user_id: string) {
+    const { data, error } = await this.supabaseService.client
+      .from('cart')
+      .select('id, product_id, quantity, products(title, price, images)')
+      .eq('user_id', user_id);
+
+    if (error) throw error;
+
+    return data;
+  }
 }

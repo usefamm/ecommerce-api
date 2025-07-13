@@ -5,8 +5,6 @@ import {
   Post,
   Body,
   Get,
-  Delete,
-  Query,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { SupabaseGuard } from '../common/guards/supabase.guard';
@@ -20,5 +18,10 @@ export class CartController {
   @Post('add')
   async addToCart(@Request() req, @Body() dto: AddToCartDto) {
     return this.cartService.addToCart(req.user.id, dto);
+  }
+
+  @Get()
+  async getCart(@Request() req) {
+    return this.cartService.getCart(req.user.id);
   }
 }
