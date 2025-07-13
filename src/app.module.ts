@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { SupabaseService } from './supabase/supabase.service';
+import { CategoriesModule } from './categories/categories.module';
 @Module({
-  imports: [AuthModule, ProductsModule],
+  imports: [AuthModule, ProductsModule, CategoriesModule],
   controllers: [AppController],
   providers: [AppService, SupabaseService],
   exports: [SupabaseService],
