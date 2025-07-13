@@ -9,6 +9,7 @@ import { CommentModule } from './comment/comment.module';
 import { CartModule } from './cart/cart.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { ProductsReviewSummaryModule } from './products-review-summary/products-review-summary.module';
 @Module({
   imports: [
     AuthModule,
@@ -19,6 +20,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ProductsReviewSummaryModule,
   ],
   controllers: [AppController],
   providers: [AppService, SupabaseService],

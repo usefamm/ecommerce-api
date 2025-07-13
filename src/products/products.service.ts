@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ProductsReviewSummaryService } from '../products-review-summary/products-review-summary.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(
+    private readonly supabaseService: SupabaseService,
+    private readonly productsReviewSummaryService: ProductsReviewSummaryService,
+  ) {}
 
   async findAll() {
     const { data, error } = await this.supabaseService.client
@@ -22,14 +26,21 @@ export class ProductsService {
   }
 
   async findById(id: string) {
-    const { data, error } = await this.supabaseService.client
+    const { data: product, error } = await this.supabaseService.client
       .from('products')
       .select('*')
       .eq('id', id)
       .single();
 
-    if (error) throw error;
-    return data;
+    if (error || !product) throw new NotFoundException('Product not found');
+
+    const summary = await this.productsReviewSummaryService.getSummary(id);
+
+    return {
+      ...product,
+      average_rating: summary.average_rating,
+      total_reviews: summary.total_reviews,
+    };
   }
 
   async create(dto: CreateProductDto) {
