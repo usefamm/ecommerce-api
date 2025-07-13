@@ -10,32 +10,17 @@ import { SignUpDto, LoginDto } from './dto/auth.dto';
 export class AuthService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  async signUp(signUpDto: SignUpDto) {
-    const { email, password } = signUpDto;
-
-    // 1. Check if user already exists
-    const { data: existingUser, error: fetchError } =
-      await this.supabaseService.client
-        .from('users')
-        .select('id')
-        .eq('email', email)
-        .single();
-
-    if (existingUser) {
-      throw new BadRequestException('Email is already registered.');
-    }
-    if (fetchError && fetchError.code !== 'PGRST116') {
-      // 'PGRST116' = no rows found, ignore this error, else throw
-      throw new BadRequestException(fetchError.message);
-    }
-
-    // 2. Create new user via Supabase auth
+  async signUp(signupDto: SignUpDto) {
+    const { email, password } = signupDto;
     const { data, error } = await this.supabaseService.client.auth.signUp({
       email,
-      password,
+      password
     });
 
     if (error) {
+      if (error.message.includes('already registered')) {
+        throw new BadRequestException('Email is already registered.');
+      }
       throw new UnauthorizedException(error.message);
     }
 
