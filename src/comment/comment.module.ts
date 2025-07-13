@@ -7,4 +7,4 @@ import { SupabaseService } from '../supabase/supabase.service';
   providers: [CommentService, SupabaseService],
   controllers: [CommentsController],
 })
-export class CommentsModule {}
+export class CommentModule {}
