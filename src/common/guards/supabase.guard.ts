@@ -1,4 +1,3 @@
-// src/auth/supabase.guard.ts
 import {
   CanActivate,
   ExecutionContext,
