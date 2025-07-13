@@ -11,7 +11,7 @@ export class CommentService {
   ) {}
   async createComment(user_id, dto: CreateCommentDto) {
     const { data: comment, error } = await this.supabaseService.client
-      .from('comments')
+      .from('reviews')
       .insert({
         product_id: dto.product_id,
         user_id,
@@ -29,18 +29,38 @@ export class CommentService {
     return comment;
   }
 
-  async getCommentsForProduct(product_id: string) {
-    const { data: comments, error: commentsErr } =
-      await this.supabaseService.client
-        .from('reviews')
-        .select('id, user_id, comment, rating, created_at, users(id, email)')
-        .eq('product_id', product_id)
-        .order('created_at', { ascending: false });
+  async getCommentsForProduct(productId: string) {
+    const { data: reviews, error } = await this.supabaseService.client
+      .from('reviews')
+      .select('id,user_id,comment,rating,created_at')
+      .eq('product_id', productId);
 
-    if (commentsErr) throw commentsErr;
+    if (error) throw error;
 
-    return {
-      comments,
-    };
+    if (!reviews || reviews.length === 0) {
+      return [];
+    }
+
+    // Extract all unique user_ids
+    const userIds = [...new Set(reviews.map((r) => r.user_id))];
+
+    // Fetch users info from auth.users for those user_ids
+    const { data: users, error: userError } = await this.supabaseService.client
+      .from('auth.users')
+      .select('id,email')
+      .in('id', userIds);
+
+    if (userError) throw userError;
+
+    // Map user id to user data for quick lookup
+    const usersMap = new Map(users.map((u) => [u.id, u]));
+
+    // Combine reviews with user info
+    const reviewsWithUsers = reviews.map((review) => ({
+      ...review,
+      user: usersMap.get(review.user_id) || null,
+    }));
+
+    return reviewsWithUsers;
   }
 }

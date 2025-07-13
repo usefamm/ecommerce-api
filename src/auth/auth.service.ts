@@ -14,7 +14,7 @@ export class AuthService {
     const { email, password } = signupDto;
     const { data, error } = await this.supabaseService.client.auth.signUp({
       email,
-      password
+      password,
     });
 
     if (error) {

@@ -7,7 +7,9 @@ export class CartService {
 
   // Add or update product quantity in cart for user
   async addToCart(user_id: string, dto: AddToCartDto) {
-    const { product_id, quantity } = dto;
+    const { product_id, quantity, selected_color, selected_size } = dto;
+    console.log("dto", dto);
+    
 
     // Check if product already in cart
     const { data: existing, error: selectErr } =
@@ -18,8 +20,7 @@ export class CartService {
         .eq('product_id', product_id)
         .single();
 
-    if (selectErr && selectErr.code !== 'PGRST116') {
-      // PGRST116 = no rows found, ignore
+    if (selectErr) {
       throw selectErr;
     }
 
@@ -38,7 +39,13 @@ export class CartService {
     } else {
       const { data, error } = await this.supabaseService.client
         .from('cart')
-        .insert({ user_id, product_id, quantity })
+        .insert({
+          user_id,
+          product_id,
+          quantity,
+          selected_color,
+          selected_size,
+        })
         .select()
         .single();
 

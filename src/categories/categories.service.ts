@@ -12,14 +12,4 @@ export class CategoriesService {
     if (error) throw error;
     return data;
   }
-
-  async create(name: string) {
-    const { data, error } = await this.supabase.client
-      .from('categories')
-      .insert({ name })
-      .select()
-      .single();
-    if (error) throw error;
-    return data;
-  }
 }

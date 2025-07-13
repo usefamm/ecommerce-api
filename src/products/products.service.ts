@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
-import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsReviewSummaryService } from '../products-review-summary/products-review-summary.service';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class ProductsService {
     const { data, error } = await this.supabaseService.client
       .from('products')
       .select(
-        'id, title, description, price, images, colors, sizes, category_id',
+        'id, title, description, price, images, colors, sizes, category:categories(name)',
       )
       .order('created_at', { ascending: false });
 
@@ -28,7 +27,9 @@ export class ProductsService {
   async findById(id: string) {
     const { data: product, error } = await this.supabaseService.client
       .from('products')
-      .select('*')
+      .select(
+        'id , title, description, price, images, colors, sizes, category:categories(name)',
+      )
       .eq('id', id)
       .single();
 
@@ -41,24 +42,5 @@ export class ProductsService {
       average_rating: summary.average_rating,
       total_reviews: summary.total_reviews,
     };
-  }
-
-  async create(dto: CreateProductDto) {
-    const { data, error } = await this.supabaseService.client
-      .from('products')
-      .insert({
-        title: dto.title,
-        description: dto.description,
-        price: dto.price,
-        images: dto.images,
-        colors: dto.colors || [],
-        sizes: dto.sizes || [],
-        category_id: dto.category_id || null,
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
   }
 }

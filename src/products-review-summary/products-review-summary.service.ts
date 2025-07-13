@@ -20,7 +20,7 @@ export class ProductsReviewSummaryService {
 
   async updateSummary(productId: string) {
     const { data: reviews, error } = await this.supabaseService.client
-      .from('comments')
+      .from('reviews')
       .select('rating')
       .eq('product_id', productId);
 
@@ -32,12 +32,13 @@ export class ProductsReviewSummaryService {
     const averageRating = totalReviews
       ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
       : 0;
+    const normalizeAverageRating = Math.min(Math.max(averageRating, 0), 5);
 
     const { error: upsertError } = await this.supabaseService.client
       .from('products_review_summary')
       .upsert({
         product_id: productId,
-        average_rating: averageRating,
+        average_rating: normalizeAverageRating,
         total_reviews: totalReviews,
       });
 

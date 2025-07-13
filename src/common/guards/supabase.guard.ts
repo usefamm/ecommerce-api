@@ -30,6 +30,8 @@ export class SupabaseGuard implements CanActivate {
     } = await this.supabaseService.client.auth.getUser(token);
 
     if (error || !user) {
+      console.log('Supabase Guard Error:', error);
+      
       throw new UnauthorizedException('Invalid or expired token');
     }
 

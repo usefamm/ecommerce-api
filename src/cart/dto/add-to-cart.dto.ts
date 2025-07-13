@@ -8,4 +8,8 @@ export class AddToCartDto {
   @Min(1)
   @Max(20)
   quantity: number;
+
+  selected_color: string; // optional, if product has colors
+
+  selected_size: string; // optional, if product has sizes
 }
