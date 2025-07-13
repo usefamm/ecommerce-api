@@ -7,13 +7,13 @@ import {
   Get,
   Param,
 } from '@nestjs/common';
-import { CommentsService } from './comment.service';
+import { CommentService } from './comment.service';
 import { SupabaseGuard } from '../common/guards/supabase.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+  constructor(private readonly commentsService: CommentService) {}
 
   // Create comment, protected route
   @UseGuards(SupabaseGuard)

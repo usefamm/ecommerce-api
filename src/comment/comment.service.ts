@@ -3,10 +3,9 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
-export class CommentsService {
+export class CommentService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  // Create a comment
   async createComment(user_id: string, dto: CreateCommentDto) {
     const { product_id, comment, rating } = dto;
 
