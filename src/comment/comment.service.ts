@@ -32,35 +32,23 @@ export class CommentService {
   async getCommentsForProduct(productId: string) {
     const { data: reviews, error } = await this.supabaseService.client
       .from('reviews')
-      .select('id,user_id,comment,rating,created_at')
+      .select(
+        `
+        id,
+        comment,
+        rating,
+        created_at,
+        user:profiles (
+          id,
+          full_name,
+          avatar_url
+        )
+      `,
+      )
       .eq('product_id', productId);
 
     if (error) throw error;
 
-    if (!reviews || reviews.length === 0) {
-      return [];
-    }
-
-    // Extract all unique user_ids
-    const userIds = [...new Set(reviews.map((r) => r.user_id))];
-
-    // Fetch users info from auth.users for those user_ids
-    const { data: users, error: userError } = await this.supabaseService.client
-      .from('auth.users')
-      .select('id,email')
-      .in('id', userIds);
-
-    if (userError) throw userError;
-
-    // Map user id to user data for quick lookup
-    const usersMap = new Map(users.map((u) => [u.id, u]));
-
-    // Combine reviews with user info
-    const reviewsWithUsers = reviews.map((review) => ({
-      ...review,
-      user: usersMap.get(review.user_id) || null,
-    }));
-
-    return reviewsWithUsers;
+    return reviews || [];
   }
 }
