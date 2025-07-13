@@ -7,6 +7,7 @@ import { SupabaseService } from './supabase/supabase.service';
 import { CategoriesModule } from './categories/categories.module';
 import { CommentModule } from './comment/comment.module';
 import { CartModule } from './cart/cart.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     AuthModule,
@@ -14,6 +15,9 @@ import { CartModule } from './cart/cart.module';
     CategoriesModule,
     CommentModule,
     CartModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, SupabaseService],
