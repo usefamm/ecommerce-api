@@ -1,4 +1,3 @@
-// src/categories/categories.service.ts
 import { Injectable } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 
