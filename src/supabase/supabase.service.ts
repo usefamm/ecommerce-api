@@ -12,7 +12,7 @@ export class SupabaseService {
     );
   }
 
-  get client() {
+  get client(): SupabaseClient {
     return this.supabase;
   }
 }
