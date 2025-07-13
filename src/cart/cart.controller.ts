@@ -5,6 +5,8 @@ import {
   Post,
   Body,
   Get,
+  Delete,
+  Query,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { SupabaseGuard } from '../common/guards/supabase.guard';
@@ -23,5 +25,13 @@ export class CartController {
   @Get()
   async getCart(@Request() req) {
     return this.cartService.getCart(req.user.id);
+  }
+
+  @Delete('remove')
+  async removeFromCart(
+    @Request() req,
+    @Query('product_id') product_id: string,
+  ) {
+    return this.cartService.removeFromCart(req.user.id, product_id);
   }
 }

@@ -57,4 +57,15 @@ export class CartService {
 
     return data;
   }
+
+  async removeFromCart(user_id: string, product_id: string) {
+    const { error } = await this.supabaseService.client
+      .from('cart')
+      .delete()
+      .eq('user_id', user_id)
+      .eq('product_id', product_id);
+
+    if (error) throw error;
+    return { message: 'Removed from cart' };
+  }
 }
