@@ -10,7 +10,7 @@ export class CommentService {
     const { product_id, comment, rating } = dto;
 
     const { data, error } = await this.supabaseService.client
-      .from('comments')
+      .from('reviews')
       .insert({
         product_id,
         user_id,
@@ -27,7 +27,7 @@ export class CommentService {
   async getCommentsForProduct(product_id: string) {
     const { data: comments, error: commentsErr } =
       await this.supabaseService.client
-        .from('comments')
+        .from('reviews')
         .select('id, user_id, comment, rating, created_at, users(id, email)') // join user email for example
         .eq('product_id', product_id)
         .order('created_at', { ascending: false });

@@ -11,7 +11,7 @@ import { CommentService } from './comment.service';
 import { SupabaseGuard } from '../common/guards/supabase.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
-@Controller('comments')
+@Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
