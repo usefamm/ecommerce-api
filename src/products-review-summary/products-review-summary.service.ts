@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
+import { ProductReviewSummary } from '../common/interfaces/product-review-summary.interface';
 
 @Injectable()
 export class ProductsReviewSummaryService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  async getSummary(productId: string) {
+  async getSummary(productId: string): Promise<ProductReviewSummary> {
     const { data, error } = await this.supabaseService.client
       .from('products_review_summary')
       .select('average_rating, total_reviews')
@@ -18,7 +19,7 @@ export class ProductsReviewSummaryService {
     return data;
   }
 
-  async updateSummary(productId: string) {
+  async updateSummary(productId: string): Promise<void> {
     const { data: reviews, error } = await this.supabaseService.client
       .from('reviews')
       .select('rating')

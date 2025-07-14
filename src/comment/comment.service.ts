@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { ProductsReviewSummaryService } from '../products-review-summary/products-review-summary.service';
+import {
+  AddComentResponse,
+  GetCommentsResponse,
+} from '../common/interfaces/comment-response.interface';
 
 @Injectable()
 export class CommentService {
@@ -9,7 +13,10 @@ export class CommentService {
     private readonly supabaseService: SupabaseService,
     private readonly productsReviewSummaryService: ProductsReviewSummaryService,
   ) {}
-  async createComment(user_id, dto: CreateCommentDto) {
+  async createComment(
+    user_id,
+    dto: CreateCommentDto,
+  ): Promise<AddComentResponse> {
     const { data: comment, error } = await this.supabaseService.client
       .from('reviews')
       .insert({
@@ -29,7 +36,10 @@ export class CommentService {
     return comment;
   }
 
-  async getCommentsForProduct(productId: string) {
+  async getCommentsForProduct(
+    productId: string,
+  ): Promise<GetCommentsResponse[]> {
+    // Fetch comments with user details
     const { data: reviews, error } = await this.supabaseService.client
       .from('reviews')
       .select(
@@ -49,6 +59,9 @@ export class CommentService {
 
     if (error) throw error;
 
-    return reviews || [];
+    return (reviews || []).map((review) => ({
+      ...review,
+      user: Array.isArray(review.user) ? review.user[0] : review.user,
+    }));
   }
 }

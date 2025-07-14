@@ -6,11 +6,14 @@ import {
   Get,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
+import { SupabaseGuard } from '../common/guards/supabase.guard';
 
 @Controller('cart')
+@UseGuards(SupabaseGuard)
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 

@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
+import {
+  CartItem,
+  RemoveFromCartData,
+} from '../common/interfaces/cart-response.interface';
 @Injectable()
 export class CartService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  // Add or update product quantity in cart for user
-  async addToCart(user_id: string, dto: AddToCartDto) {
+  async addToCart(user_id: string, dto: AddToCartDto): Promise<CartItem> {
     const { product_id, quantity, selected_color, selected_size } = dto;
 
     // Check if product already in cart
@@ -56,7 +59,7 @@ export class CartService {
     }
   }
 
-  async getCart(user_id: string) {
+  async getCart(user_id: string): Promise<CartItem[]> {
     const { data, error } = await this.supabaseService.client
       .from('cart')
       .select('id, product_id, quantity, products(title, price, images)')
@@ -67,7 +70,10 @@ export class CartService {
     return data;
   }
 
-  async removeFromCart(user_id: string, product_id: string) {
+  async removeFromCart(
+    user_id: string,
+    product_id: string,
+  ): Promise<RemoveFromCartData> {
     const { error } = await this.supabaseService.client
       .from('cart')
       .delete()

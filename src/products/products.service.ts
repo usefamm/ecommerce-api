@@ -1,6 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { ProductsReviewSummaryService } from '../products-review-summary/products-review-summary.service';
+import {
+  Product,
+  ProductDetail,
+} from '../common/interfaces/products-response.interface';
 
 @Injectable()
 export class ProductsService {
@@ -9,7 +13,7 @@ export class ProductsService {
     private readonly productsReviewSummaryService: ProductsReviewSummaryService,
   ) {}
 
-  async findAll() {
+  async findAll(): Promise<Product[]> {
     const { data, error } = await this.supabaseService.client
       .from('products')
       .select(
@@ -20,11 +24,13 @@ export class ProductsService {
     if (error) throw error;
     return data.map((product) => ({
       ...product,
-      image: product.images?.[0] || null,
+      category: Array.isArray(product.category)
+        ? product.category[0]
+        : product.category,
     }));
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<ProductDetail> {
     const { data: product, error } = await this.supabaseService.client
       .from('products')
       .select(
@@ -39,6 +45,9 @@ export class ProductsService {
 
     return {
       ...product,
+      category: Array.isArray(product.category)
+        ? product.category[0]
+        : product.category,
       average_rating: summary.average_rating,
       total_reviews: summary.total_reviews,
     };

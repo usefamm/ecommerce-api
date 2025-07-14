@@ -10,6 +10,7 @@ import {
 import { CommentService } from './comment.service';
 import { SupabaseGuard } from '../common/guards/supabase.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { AddComentResponse } from '../common/interfaces/comment-response.interface';
 
 @Controller('comment')
 @UseGuards(SupabaseGuard)
@@ -17,7 +18,10 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post()
-  async addComment(@Request() req, @Body() dto: CreateCommentDto) {
+  async addComment(
+    @Request() req,
+    @Body() dto: CreateCommentDto,
+  ): Promise<AddComentResponse> {
     const user = req.user;
     return this.commentService.createComment(user.id, dto);
   }
