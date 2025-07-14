@@ -10,7 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
     res.on('finish', () => {
       const { statusCode } = res;
-      const tick = statusCode < 400 ? '✅' : '❌';
+      const tick = statusCode < 400 ? 'DONE' : 'FAILD';
 
       this.logger.log(`${tick} ${method} ${originalUrl} ${statusCode}`);
     });

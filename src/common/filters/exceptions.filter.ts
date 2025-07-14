@@ -22,7 +22,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException ? exception.getResponse() : exception;
 
     this.logger.error(
-      `❌ ${request.method} ${request.url} -> Status ${status} - Error: ${JSON.stringify(message)}`,
+      `${request.method} ${request.url} -> Status ${status} - Error: ${JSON.stringify(message)}`,
     );
 
     response.status(status).json({

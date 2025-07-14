@@ -30,7 +30,6 @@ export class CommentService {
 
     if (error) throw error;
 
-    // Update review summary after new comment
     await this.productsReviewSummaryService.updateSummary(dto.product_id);
 
     return comment;
@@ -39,7 +38,6 @@ export class CommentService {
   async getCommentsForProduct(
     productId: string,
   ): Promise<GetCommentsResponse[]> {
-    // Fetch comments with user details
     const { data: reviews, error } = await this.supabaseService.client
       .from('reviews')
       .select(

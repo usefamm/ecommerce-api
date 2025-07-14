@@ -12,7 +12,6 @@ export class CartService {
   async addToCart(user_id: string, dto: AddToCartDto): Promise<CartItem> {
     const { product_id, quantity, selected_color, selected_size } = dto;
 
-    // Check if product already in cart
     const { data: existing, error: selectErr } =
       await this.supabaseService.client
         .from('cart')
@@ -27,7 +26,6 @@ export class CartService {
     }
 
     if (existing) {
-      // Update quantity
       const newQuantity = Math.min(existing.quantity + quantity, 20);
       const { data, error } = await this.supabaseService.client
         .from('cart')
