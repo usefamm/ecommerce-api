@@ -9,7 +9,9 @@ export class AddToCartDto {
   @Max(20)
   quantity: number;
 
-  selected_color: string; // optional, if product has colors
+  @IsString()
+  selected_color: string;
 
-  selected_size: string; // optional, if product has sizes
+  @IsString()
+  selected_size: string;
 }
