@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { SupabaseService } from './supabase/supabase.service';
@@ -22,8 +20,7 @@ import { ProductsReviewSummaryModule } from './products-review-summary/products-
     }),
     ProductsReviewSummaryModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, SupabaseService],
+  providers: [SupabaseService],
   exports: [SupabaseService],
 })
 export class AppModule {
