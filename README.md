@@ -34,8 +34,7 @@ A RESTful API for an e-commerce platform built with **NestJS** and **Supabase**,
 
 3.  **Set up environment variables**
     SUPABASE_URL=your_supabase_url
-    SUPABASE_KEY=service_role_or_anon_key 
-    JWT_SECRET=your_jwt_secret
+    SUPABASE_KEY=service_role_key 
 
 4.  **Run the API**
      npm run start:dev
