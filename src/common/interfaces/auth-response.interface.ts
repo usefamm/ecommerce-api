@@ -19,6 +19,7 @@ export interface LoginResponse {
   };
 }
 
+
 export interface SignUpResponse {
   success: boolean;
   statusCode: number;
