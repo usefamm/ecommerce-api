@@ -7,9 +7,7 @@ A RESTful API for an e-commerce platform built with **NestJS** and **Supabase**,
 ## 🚀 Features
 
 - Product listing,and search
-- User carts & favorites management
-- Order creation & order history
-- Middleware to attach authenticated user to requests
+- User carts
 - leaving comments 
 - every product has a rating
 
